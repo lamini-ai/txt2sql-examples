@@ -1,0 +1,25 @@
+# Lamini API configuration
+api:
+  url: "https://app.lamini.ai"
+  key: "cd4a9dd4af83cdcd54cee57df5377cc22884f79b956c68cc89403c7f24c3fdea"
+
+# Database configuration
+database:
+  path: "data_bakery/bakery_1.sqlite"
+
+# Model configuration
+model:
+  default: "meta-llama/Meta-Llama-3-70B-Instruct"
+  memory_tuning: "meta-llama/Llama-3.1-8B-Instruct"
+
+# Memory tuning configuration
+memory_tuning:
+  max_steps: 120
+  learning_rate: 0.0003
+  max_gpus: 6
+  max_nodes: 1
+
+# File paths
+paths:
+  gold_test_set: "data_bakery/gold_test_set.jsonl"
+  glossary: "data_bakery/glossary.jsonl"

@@ -1,0 +1,19 @@
+{"key": "SchemaColumns", "value": "customers: [Id, FirstName, LastName], goods: [Id, Flavor, Food, Price], items: [Receipt, Ordinal, Item], receipts: [ReceiptNumber, Date, CustomerId]"}
+{"key": "TableAliases", "value": "Customers c, receipts r, items i, goods g."}
+{"key": "DateStandard", "value": "CRITICAL: Use SUBSTR(r.Date, 1, 2) for day extraction. NEVER use position 2."}
+{"key": "DayOfWeek", "value": "CASE CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday'... END"}
+{"key": "WeekendDetection", "value": "CASE WHEN CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 IN (0, 6) THEN 'Weekend' ELSE 'Weekday' END"}
+{"key": "TimePeriods", "value": "CASE WHEN CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) <= 10 THEN 'Early October'... END"}
+{"key": "LimitClause", "value": "If question asks for 'top X', INCLUDE 'LIMIT X' in your query."}
+{"key": "ReturnFullNames", "value": "Always return FirstName AND LastName when working with customers."}
+{"key": "NameFormat", "value": "c.FirstName || ' ' || c.LastName (with space between)"}
+{"key": "ProductFormat", "value": "g.Food || ' - ' || g.Flavor (with spaces around dash)"}
+{"key": "Count_vs_Sum", "value": "'Most popular' = COUNT(*), 'Most revenue' = SUM(g.Price)"}
+{"key": "TransactionValue", "value": "AVG per transaction: WITH ReceiptTotals AS (SELECT i.Receipt, SUM(g.Price) AS Total FROM items i JOIN goods g ON i.Item = g.Id GROUP BY i.Receipt) SELECT AVG(rt.Total)..."}
+{"key": "CompareGroups", "value": "When comparing groups (weekday vs weekend), use identical calculations for each group."}
+{"key": "ProductPairs", "value": "JOIN items i1 JOIN items i2 ON i1.Receipt = i2.Receipt AND i1.Item < i2.Item"}
+{"key": "UniqueClause", "value": "Customer product variety: Return COUNT(DISTINCT g.Id), COUNT(DISTINCT g.Food), AND COUNT(DISTINCT g.Flavor)"}
+{"key": "CTEReference", "value": "Reference CTE columns by CTE name (e.g., CustomerCTE.Id), not original table alias."}
+{"key": "QuantityCalc", "value": "Items sold by category: COUNT(*) grouped by g.Food"}
+{"key": "RevenueCalc", "value": "Revenue by category: SUM(g.Price) grouped by g.Food"}
+{"key": "ConsistentGrouping", "value": "When using CASE in SELECT, use the exact same CASE expression in GROUP BY."}
