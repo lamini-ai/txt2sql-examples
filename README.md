@@ -192,28 +192,3 @@ Running the pipeline will generate:
 3. **Tuned Model**: A model ID returned by Lamini's API that can be used for inference
 4. **Evaluation Results**: JSON file with detailed comparison of generated queries vs. gold standard
 5. **Analysis Report**: Markdown report summarizing the model's performance
-
-## Customization
-
-### Custom Generators
-
-You can create custom generators to adapt to your specific domain needs:
-
-## Best Practices
-
-1. **Quality Glossary**: Create a comprehensive glossary that covers all domain-specific terms, schema details, and business logic.
-2. **Diverse Evaluation Set**: Include various query types (SELECT, JOIN, GROUP BY, etc.) that cover all tables and relationships.
-3. **Iterative Improvement**: Analyze failed queries and enhance your generators and glossary accordingly.
-4. **Schema Documentation**: Add detailed schema information to help the model understand table relationships.
-
-## Troubleshooting
-
-- **Invalid SQL Generation**: Ensure your glossary covers all domain terms and check schema formatting.
-- **Poor Performance**: Increase the diversity of your generated data or tune for more steps.
-- **Missing Concepts**: Use the analyzer to identify and generate data for uncovered concepts.
-- **Execution Errors**: Verify your SQLite database matches the schema exactly.
-
-## Acknowledgments
-
-- This project uses the Bakery dataset from the Spider benchmark collection.
-- Powered by Lamini's Memory Experiment framework.
