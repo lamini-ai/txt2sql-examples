@@ -3,7 +3,8 @@ import json
 import lamini
 import pathlib
 from typing import List, Dict
-from lamini import ErrorAnalysis, SQLErrorAnalysis
+from lamini.experiment.error_analysis_concepts import ErrorAnalysis
+from lamini.experiment.error_analysis_sql import SQLErrorAnalysis
 from lamini.experiment.generators import (
     SchemaToSQLGenerator,
     SQLDebuggerGenerator
@@ -19,7 +20,6 @@ from helpers import (
     process_variation,
     get_user_input,
     extract_sql, 
-    save_results,
     load_config
 )
 

@@ -1,19 +1,26 @@
-{"key": "SchemaColumns", "value": "customers: [Id, FirstName, LastName], goods: [Id, Flavor, Food, Price], items: [Receipt, Ordinal, Item], receipts: [ReceiptNumber, Date, CustomerId]"}
-{"key": "TableAliases", "value": "Customers c, receipts r, items i, goods g."}
-{"key": "DateStandard", "value": "CRITICAL: Use SUBSTR(r.Date, 1, 2) for day extraction. NEVER use position 2."}
+{"key": "SchemaColumns", "value": "⚠️ EXACT COLUMNS ONLY: customers: [Id, FirstName, LastName], goods: [Id, Flavor, Food, Price], items: [Receipt, Ordinal, Item], receipts: [ReceiptNumber, Date, CustomerId]"}
+{"key": "TableAliases", "value": "Always use: customers c, receipts r, items i, goods g"}
+{"key": "CTEColumnAccess", "value": "⚠️ CRITICAL: When accessing columns from a CTE, YOU MUST use columns that were explicitly defined in the CTE's SELECT clause. Common error: Using g.Food when the CTE only selected Product"}
+{"key": "CTEFieldReference", "value": "⚠️ CRITICAL: Reference CTE fields using CTE name (CustomerCTE.FirstName), NEVER using original table aliases (c.FirstName) in outer queries"}
+{"key": "SelectExplicitly", "value": "⚠️ CRITICAL: In CTEs, explicitly SELECT every column you need in outer queries. If you need g.Food later, include it in the CTE's SELECT clause"}
+{"key": "AliasConsistency", "value": "When using AS to create aliases, reference the aliases exactly as defined. If you use 'AS FullName', reference it as 'FullName' not as 'Name'"}
+{"key": "GroupByAlias", "value": "When grouping by a complex expression with CASE, either repeat the EXACT expression or use a column alias"}
+{"key": "DateStandard", "value": "⚠️ CRITICAL: Use SUBSTR(r.Date, 1, 2) for day extraction. NEVER use position 2"}
 {"key": "DayOfWeek", "value": "CASE CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday'... END"}
 {"key": "WeekendDetection", "value": "CASE WHEN CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 IN (0, 6) THEN 'Weekend' ELSE 'Weekday' END"}
 {"key": "TimePeriods", "value": "CASE WHEN CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) <= 10 THEN 'Early October'... END"}
-{"key": "LimitClause", "value": "If question asks for 'top X', INCLUDE 'LIMIT X' in your query."}
-{"key": "ReturnFullNames", "value": "Always return FirstName AND LastName when working with customers."}
-{"key": "NameFormat", "value": "c.FirstName || ' ' || c.LastName (with space between)"}
-{"key": "ProductFormat", "value": "g.Food || ' - ' || g.Flavor (with spaces around dash)"}
+{"key": "GroupByCaseStatement", "value": "⚠️ When using CASE in SELECT, you must repeat the EXACT SAME CASE expression in GROUP BY. Copy and paste the entire expression to ensure they match"}
+{"key": "LimitClause", "value": "If question asks for 'top X', INCLUDE 'LIMIT X' in your query"}
+{"key": "EntityIdentifiers", "value": "Always include primary keys when returning entities: c.Id for customers, g.Id for goods, r.ReceiptNumber for receipts"}
 {"key": "Count_vs_Sum", "value": "'Most popular' = COUNT(*), 'Most revenue' = SUM(g.Price)"}
 {"key": "TransactionValue", "value": "AVG per transaction: WITH ReceiptTotals AS (SELECT i.Receipt, SUM(g.Price) AS Total FROM items i JOIN goods g ON i.Item = g.Id GROUP BY i.Receipt) SELECT AVG(rt.Total)..."}
-{"key": "CompareGroups", "value": "When comparing groups (weekday vs weekend), use identical calculations for each group."}
+{"key": "CompareGroups", "value": "When comparing groups (weekday vs weekend), use identical calculations for each group"}
 {"key": "ProductPairs", "value": "JOIN items i1 JOIN items i2 ON i1.Receipt = i2.Receipt AND i1.Item < i2.Item"}
 {"key": "UniqueClause", "value": "Customer product variety: Return COUNT(DISTINCT g.Id), COUNT(DISTINCT g.Food), AND COUNT(DISTINCT g.Flavor)"}
-{"key": "CTEReference", "value": "Reference CTE columns by CTE name (e.g., CustomerCTE.Id), not original table alias."}
+{"key": "ColumnReferenceScopes", "value": "⚠️ Columns are only accessible in their scope. In nested queries, reference only columns from: 1) tables joined in that scope, or 2) columns explicitly selected in outer queries"}
 {"key": "QuantityCalc", "value": "Items sold by category: COUNT(*) grouped by g.Food"}
 {"key": "RevenueCalc", "value": "Revenue by category: SUM(g.Price) grouped by g.Food"}
-{"key": "ConsistentGrouping", "value": "When using CASE in SELECT, use the exact same CASE expression in GROUP BY."}
+{"key": "SimpleColumnAliases", "value": "Use simple aliases without spaces or special characters: 'AS PurchaseCount' not 'AS Purchase Count'"}
+{"key": "ColumnCopy", "value": "⚠️ CRITICAL: When copying data between queries, ensure the selected columns are identical. Don't reference a column unless it was explicitly selected"}
+{"key": "WithClauseConsistency", "value": "When using WITH clause, ensure all referenced CTEs are defined. Don't reference a CTE that isn't defined"}
+{"key": "JoinConditionFields", "value": "⚠️ In JOIN conditions, only reference columns that exist in the tables being joined. Don't use CustomerCTE.Id in a JOIN if CustomerCTE doesn't have an Id field"}

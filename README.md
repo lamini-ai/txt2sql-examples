@@ -16,7 +16,7 @@ The pipeline includes:
 
 ## Bakery Dataset
 
-This example uses the Bakery dataset from the Spider benchmark collection. The dataset contains information about one month of sales for a small bakery shop, with the following structure:
+This example uses the Bakery dataset from the Spider benchmark collection. The dataset contains information about sales for a small bakery shop, with the following structure:
 
 ### Database Schema
 
@@ -102,8 +102,7 @@ Contains utility functions used across scripts:
 
 ### 1. Prepare Your Glossary
 
-Create a glossary file that defines domain-specific terms and provides additional context about the database:
-
+Create a glossary file that defines domain-specific terms and provides additional context about the database
 
 ### 2. Create Evaluation Set
 

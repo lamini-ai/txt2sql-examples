@@ -1,0 +1,53 @@
+{
+  "failed_queries": [
+    {
+      "question": "What is the average transaction value for each type of food item?",
+      "generated_sql": "https://gist.github.com/anonymous/d98f0a5f6f7f7a97a2b07a6b8e3f5aa3;",
+      "error_message": "no such column: g.Food",
+      "error_explanation": "Query is invalid: no such column: g.Food"
+    },
+    {
+      "question": "What is the average daily revenue throughout weekdays in October 2007?",
+      "generated_sql": "WITH DailyRevenueCTE AS (SELECT CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) AS Day, SUM(g.Price) AS DailyRevenue FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id WHERE CAST(SUBSTR(r.Date, 6, 4) AS INTEGER) = 2007 AND CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) >= 1 AND CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) <= 31 GROUP BY Day), WeekdayCTE AS (SELECT Day, DailyRevenue FROM DailyRevenueCTE WHERE CASE CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' ELSE 'Weekend' END IN ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')) SELECT AVG(WeekdayCTE.DailyRevenue) FROM WeekdayCTE;",
+      "error_message": "no such column: r.Date",
+      "error_explanation": "Query is invalid: no such column: r.Date"
+    },
+    {
+      "question": "What day of the week has the highest number of transactions in the last month?",
+      "generated_sql": "WITH RecentReceipts AS (SELECT * FROM receipts WHERE SUBSTR(r.Date, 1, 7) = SUBSTR((DATE('now') - INTERVAL 1 MONTH), 1, 7)) SELECT CASE CAST(SUBSTR(rr.Date, 1, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END AS DayOfWeek, COUNT(DISTINCT rr.ReceiptNumber) AS TransactionCount FROM RecentReceipts rr GROUP BY DayOfWeek ORDER BY TransactionCount DESC LIMIT 1;",
+      "error_message": "near \"1\": syntax error",
+      "error_explanation": "Query is invalid: near \"1\": syntax error"
+    },
+    {
+      "question": "Which customers have purchased items from all available product categories?",
+      "generated_sql": "With CustomerCategories AS (SELECT r.CustomerId, g.Food AS Category FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id), CategoryCount AS (SELECT COUNT(DISTINCT g.Food) AS TotalCategories FROM goods) SELECT c.Id, c.FirstName || ' ' || c.LastName AS FullName FROM customers c JOIN CustomerCategories cc ON c.Id = cc.CustomerId GROUP BY c.Id, FullName HAVING COUNT(DISTINCT cc.Category) = (SELECT TotalCategories FROM CategoryCount) ORDER BY c.Id;",
+      "error_message": "no such column: g.Food",
+      "error_explanation": "Query is invalid: no such column: g.Food"
+    },
+    {
+      "question": "What is the average spending per weekday visit for each customer?",
+      "generated_sql": "With CustomerCTE AS (SELECT c.Id, c.FirstName, c.LastName, r.ReceiptNumber FROM customers c JOIN receipts r ON c.Id = r.CustomerId), DaySpentCTE AS (SELECT CustomerId, ReceiptNumber, SUM(g.Price) AS DaySpent FROM CustomerCTE JOIN items i ON CustomerCTE.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY CustomerCTE.Id, CustomerCTE.ReceiptNumber), WeekdayCTE AS (SELECT CustomerId, COUNT(DISTINCT ReceiptNumber) AS WeekdayVisitCount, SUM(DaySpent) AS WeekdaySpent FROM DaySpentCTE JOIN receipts r ON DaySpentCTE.ReceiptNumber = r.ReceiptNumber WHERE CASE CAST(SUBSTR(r.Date, 1, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' ELSE 'Weekday' END NOT IN ('Saturday', 'Sunday') GROUP BY CustomerId) SELECT c.Id, c.FirstName, c.LastName, WeekdayCTE.WeekdayVisitCount, WeekdayCTE.WeekdaySpent, ROUND(WeekdayCTE.WeekdaySpent / WeekdayCTE.WeekdayVisitCount, 2) AS AverageSpendPerWeekdayVisit FROM customers c JOIN WeekdayCTE ON c.Id = WeekdayCTE.CustomerId ORDER BY AverageSpendPerWeekdayVisit DESC;",
+      "error_message": "no such column: c.Id",
+      "error_explanation": "Query is invalid: no such column: c.Id"
+    }
+  ],
+  "basic_stats": {
+    "total_failed_queries": 5,
+    "error_types": {
+      "other": 4,
+      "syntax_error": 1
+    },
+    "sql_features": {
+      "join": 3,
+      "cte": 4,
+      "subquery": 4,
+      "group_by": 4,
+      "aggregation": 4
+    },
+    "correction_stats": {
+      "corrected": 0,
+      "not_corrected": 5
+    }
+  },
+  "llm_analysis": " Below are the detailed insights for each failed query: \\n\\n**Query 1:** \\nError Explanation: The error message indicates that there is no column named `g.Food` in the query. \\nRoot Cause Analysis: The error is caused by a typo or incorrect column reference in the query. \\nCorrection Suggestions: Verify that the column exists in the `goods` table and correct the column reference if necessary. \\nImprovement Recommendations: Implement a schema validation process to ensure that column references are accurate before executing the query. \\n\\n**Query 2:** \\nError Explanation: The error message indicates that there is no column named `r.Date` in the query. \\nRoot Cause Analysis: The error is caused by a typo or incorrect column reference in the query. \\nCorrection Suggestions: Verify that the column exists in the `receipts` table and correct the column reference if necessary. \\nImprovement Recommendations: Implement a schema validation process to ensure that column references are accurate before executing the query. \\n\\n**Query 3:** \\nError Explanation: The error message indicates a syntax error near `1`. \\nRoot Cause Analysis: The error is caused by incorrect syntax in the `CASE` statement. \\nCorrection Suggestions: Verify that the syntax of the `CASE` statement is correct, and ensure that the column references are accurate. \\nImprovement Recommendations: Implement a syntax validation process to ensure that queries are syntactically correct before executing. \\n\\n**Query 4:** \\nError Explanation: The error message indicates that there is no column named `g.Food` in the query. \\nRoot Cause Analysis: The error is caused by a typo or incorrect column reference in the query. \\nCorrection Suggestions: Verify that the column exists in the `goods` table and correct the column reference if necessary. \\nImprovement Recommendations: Implement a schema validation process to ensure that column references are accurate before executing the query. \\n\\n**Query 5:** \\nError Explanation: The error message indicates that there is no column named `c.Id` in the query. \\nRoot Cause Analysis: The error is caused by a typo or incorrect column reference in the query. \\nCorrection Suggestions: Verify that the column exists in the `customers` table and correct the column reference if necessary. \\nImprovement Recommendations: Implement a schema validation process to ensure that column references are accurate before executing the query. \\n\\n**Pattern Identification:** \\nBased on the analysis, the following patterns are identified: \\n\\n* **Column reference errors**: A majority of the failed queries (4 out of 5) are caused by incorrect column references. This suggests that the SQL generation process does not properly validate column references before executing the query. \\n* **Lack of schema validation**: The errors indicate a lack of schema validation in the SQL generation process, leading to incorrect column references and syntax errors. \\n* **Complexity of queries**: The use of CTEs, joins, and subqueries increases the complexity of the queries, making them more prone to errors. \\n\\n**Recommendations for Improvement:** \\nTo prevent similar errors in the future, it is recommended to: \\n\\n* Implement a schema validation process to ensure that column references are accurate before executing the query. \\n* Implement a syntax validation process to ensure that queries are syntactically correct before executing. \\n* Simplify query complexity by breaking down complex queries into smaller, more manageable pieces. \\n* Implement a testing and validation process to catch errors before they reach production. \\n"
+}

@@ -3,7 +3,7 @@ import os
 import yaml
 import lamini
 from lamini import Lamini
-from helpers import save_results_to_jsonl, load_config
+from helpers import save_results_to_jsonl, load_config, format_glossary, read_jsonl
 from lamini.experiment.error_analysis_eval import SQLExecutionPipeline
 
 def read_test_set(file_path):
@@ -24,14 +24,18 @@ def read_test_set(file_path):
                 print(f"Missing required key in line: {line}")
     return test_cases
 
-def run_inference(test_cases, model_id):
+def run_inference(test_cases, model_id, formatted_glossary):
     """Run inference for each question and extract SQL query."""
     llm = Lamini(model_name=model_id)
     results = []
     
     for i, test_case in enumerate(test_cases, 1):
         question = test_case['question']
-        prompt = f'''<|begin_of_text|><|start_header_id|>user<|end_header_id|> Output only SQL - {question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>'''
+        prompt = f'''<|begin_of_text|><|start_header_id|>user<|end_header_id|> 
+
+            Glossary: {formatted_glossary}
+            
+            Output only SQL - {question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>'''
         
         try:
             response = llm.generate(prompt)
@@ -76,6 +80,7 @@ def main(config_path="config.yml"):
 
     test_set_path = config['paths']['gold_test_set']
     db_path = config['database']['path']
+    glossary_path = config['paths']['glossary']  # Add glossary path
 
     model_id = input("Enter the model ID for inference (this is the output model ID from memory tuning): ")
     
@@ -92,14 +97,24 @@ def main(config_path="config.yml"):
         "db_path": db_path
     }
     
+    # # Load schema and glossary
+    # from helpers import get_schema
+    # schema = get_schema(db_path)
+    # print("Database schema loaded")
+    
+    # Load and format glossary
+    glossary_entries = read_jsonl(glossary_path)
+    formatted_glossary = format_glossary(glossary_entries)
+    # print(f"Loaded glossary with {len(glossary_entries)} entries")
+    
     # Step 1: Read test set
     print("Reading test set...")
     test_cases = read_test_set(test_set_path)
     print(f"Found {len(test_cases)} test cases")
     
-    # Step 2: Run inference
+    # Step 2: Run inference with schema and glossary
     print("Running inference...")
-    inference_results = run_inference(test_cases, model_id)
+    inference_results = run_inference(test_cases, model_id, formatted_glossary)
     print("Saving inference results...")
     save_results_to_jsonl(inference_results, inference_output_path)
     

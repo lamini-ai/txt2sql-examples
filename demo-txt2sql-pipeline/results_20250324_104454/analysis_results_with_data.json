@@ -1,0 +1,1501 @@
+{
+  "results": [
+    {
+      "question": "What are the top 5 most frequently purchased products in our bakery?",
+      "gold_query": "SELECT g.Id, g.Food, g.Flavor, COUNT(*) AS PurchaseCount FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Id, g.Food, g.Flavor ORDER BY PurchaseCount DESC LIMIT 5;",
+      "generated_query": "\n\nWITH PurchasesCTE AS (SELECT i.Item, COUNT(*) AS PurchaseCount FROM items i GROUP BY i.Item) SELECT g.Id, g.Flavor, g.Food, p.PurchaseCount FROM PurchasesCTE p JOIN goods g ON p.Item = g.Id ORDER BY p.PurchaseCount DESC LIMIT 5;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1,
+      "explanation": "The two query results are functionally equivalent because they contain the same information, despite minor differences in formatting. The Gold Query and the Generated Query both produce the top 5 most frequently purchased products in the bakery, with the same Id, Food, Flavor, and PurchaseCount values. The differences in column ordering (e.g., Flavor and Food columns are swapped) do not affect the functional equivalence, as the information is still presented in a clear and consistent manner. The results answer the original question equally well, providing the top 5 most frequently purchased products in the bakery.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": "90-APP-11",
+          "Food": "Tart",
+          "Flavor": "Apple",
+          "PurchaseCount": 25
+        },
+        {
+          "Id": "90-APR-PF",
+          "Food": "Tart",
+          "Flavor": "Apricot",
+          "PurchaseCount": 22
+        },
+        {
+          "Id": "70-M-CH-DZ",
+          "Food": "Meringue",
+          "Flavor": "Chocolate",
+          "PurchaseCount": 20
+        },
+        {
+          "Id": "90-BLK-PF",
+          "Food": "Tart",
+          "Flavor": "Blackberry",
+          "PurchaseCount": 20
+        },
+        {
+          "Id": "50-CHS",
+          "Food": "Croissant",
+          "Flavor": "Cheese",
+          "PurchaseCount": 19
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": "90-APP-11",
+          "Flavor": "Apple",
+          "Food": "Tart",
+          "PurchaseCount": 25
+        },
+        {
+          "Id": "90-APR-PF",
+          "Flavor": "Apricot",
+          "Food": "Tart",
+          "PurchaseCount": 22
+        },
+        {
+          "Id": "70-M-CH-DZ",
+          "Flavor": "Chocolate",
+          "Food": "Meringue",
+          "PurchaseCount": 20
+        },
+        {
+          "Id": "90-BLK-PF",
+          "Flavor": "Blackberry",
+          "Food": "Tart",
+          "PurchaseCount": 20
+        },
+        {
+          "Id": "50-CHS",
+          "Flavor": "Cheese",
+          "Food": "Croissant",
+          "PurchaseCount": 19
+        }
+      ]
+    },
+    {
+      "question": "Which customers spent the most in total at our bakery during October 2007?",
+      "gold_query": "SELECT c.Id, c.FirstName, c.LastName, SUM(g.Price) AS TotalSpent FROM customers c JOIN receipts r ON c.Id = r.CustomerId JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY c.Id, c.FirstName, c.LastName ORDER BY TotalSpent DESC LIMIT 10;",
+      "generated_query": "\n\nWITH CustomerTotals AS (\n  SELECT c.Id, c.FirstName, c.LastName, SUM(g.Price) AS TotalSpent\n  FROM customers c\n  JOIN receipts r ON c.Id = r.CustomerId\n  JOIN items i ON r.ReceiptNumber = i.Receipt\n  JOIN goods g ON i.Item = g.Id\n  WHERE r.Date LIKE '%-Oct-2007'\n  GROUP BY c.Id, c.FirstName, c.LastName\n)\nSELECT Id, FirstName, LastName, TotalSpent\nFROM CustomerTotals\nORDER BY TotalSpent DESC\nLIMIT 10;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "The two query results are functionally equivalent.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "TotalSpent": 206.60999999999999
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "TotalSpent": 190.41
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "TotalSpent": 187.7
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "TotalSpent": 163.19
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "TotalSpent": 147.6
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "TotalSpent": 145.22
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "TotalSpent": 137.16
+        },
+        {
+          "Id": 10,
+          "FirstName": "CORETTA",
+          "LastName": "DUKELOW",
+          "TotalSpent": 119.92
+        },
+        {
+          "Id": 4,
+          "FirstName": "SIXTA",
+          "LastName": "ENGLEY",
+          "TotalSpent": 101.56
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "TotalSpent": 93.91
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "TotalSpent": 206.60999999999999
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "TotalSpent": 190.41
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "TotalSpent": 187.7
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "TotalSpent": 163.19
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "TotalSpent": 147.6
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "TotalSpent": 145.22
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "TotalSpent": 137.16
+        },
+        {
+          "Id": 10,
+          "FirstName": "CORETTA",
+          "LastName": "DUKELOW",
+          "TotalSpent": 119.92
+        },
+        {
+          "Id": 4,
+          "FirstName": "SIXTA",
+          "LastName": "ENGLEY",
+          "TotalSpent": 101.56
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "TotalSpent": 93.91
+        }
+      ]
+    },
+    {
+      "question": "What is the average transaction value for each day of the week?",
+      "gold_query": "SELECT CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END AS DayOfWeek, AVG(subquery.ReceiptTotal) AS AverageTransactionValue FROM receipts r JOIN (SELECT i.Receipt, SUM(g.Price) AS ReceiptTotal FROM items i JOIN goods g ON i.Item = g.Id GROUP BY i.Receipt) subquery ON r.ReceiptNumber = subquery.Receipt GROUP BY DayOfWeek ORDER BY CASE DayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 WHEN 'Sunday' THEN 7 END;",
+      "generated_query": "WITH ReceiptTotals AS (SELECT i.Receipt, SUM(g.Price) AS Total FROM items i JOIN goods g ON i.Item = g.Id GROUP BY i.Receipt) SELECT CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END AS DayOfWeek, AVG(rt.Total) AS AverageTransactionValue FROM receipts r JOIN ReceiptTotals rt ON r.ReceiptNumber = rt.Receipt GROUP BY CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END ORDER BY CASE DayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 WHEN 'Sunday' THEN 7 END;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "After analyzing the two SQL query results, I conclude that they are functionally equivalent.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "DayOfWeek": "Monday",
+          "AverageTransactionValue": 12.040833333333333
+        },
+        {
+          "DayOfWeek": "Tuesday",
+          "AverageTransactionValue": 13.978064516129033
+        },
+        {
+          "DayOfWeek": "Wednesday",
+          "AverageTransactionValue": 8.728571428571428
+        },
+        {
+          "DayOfWeek": "Thursday",
+          "AverageTransactionValue": 6.815
+        },
+        {
+          "DayOfWeek": "Friday",
+          "AverageTransactionValue": 9.178749999999999
+        },
+        {
+          "DayOfWeek": "Saturday",
+          "AverageTransactionValue": 12.555
+        },
+        {
+          "DayOfWeek": "Sunday",
+          "AverageTransactionValue": 10.703956043956044
+        }
+      ],
+      "generated_result_data": [
+        {
+          "DayOfWeek": "Monday",
+          "AverageTransactionValue": 12.040833333333333
+        },
+        {
+          "DayOfWeek": "Tuesday",
+          "AverageTransactionValue": 13.978064516129033
+        },
+        {
+          "DayOfWeek": "Wednesday",
+          "AverageTransactionValue": 8.728571428571428
+        },
+        {
+          "DayOfWeek": "Thursday",
+          "AverageTransactionValue": 6.815
+        },
+        {
+          "DayOfWeek": "Friday",
+          "AverageTransactionValue": 9.178749999999999
+        },
+        {
+          "DayOfWeek": "Saturday",
+          "AverageTransactionValue": 12.555
+        },
+        {
+          "DayOfWeek": "Sunday",
+          "AverageTransactionValue": 10.703956043956044
+        }
+      ]
+    },
+    {
+      "question": "What are the three most popular product categories based on total sales?",
+      "gold_query": "SELECT g.Food AS Category, COUNT(*) AS TotalSales FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Food ORDER BY TotalSales DESC LIMIT 3;",
+      "generated_query": "  WITH SalesByFood AS (   SELECT g.Food, COUNT(*) AS TotalSales   FROM items i   JOIN goods g ON i.Item = g.Id   GROUP BY g.Food ) SELECT Food AS Category, TotalSales FROM SalesByFood ORDER BY TotalSales DESC LIMIT 3;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "The two queries are functionally equivalent.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Category": "Tart",
+          "TotalSales": 157
+        },
+        {
+          "Category": "Cookie",
+          "TotalSales": 91
+        },
+        {
+          "Category": "Cake",
+          "TotalSales": 80
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Category": "Tart",
+          "TotalSales": 157
+        },
+        {
+          "Category": "Cookie",
+          "TotalSales": 91
+        },
+        {
+          "Category": "Cake",
+          "TotalSales": 80
+        }
+      ]
+    },
+    {
+      "question": "Which products generated the most revenue in October 2007?",
+      "gold_query": "SELECT g.Id, g.Food, g.Flavor, SUM(g.Price) AS TotalRevenue FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Id, g.Food, g.Flavor ORDER BY TotalRevenue DESC LIMIT 10;",
+      "generated_query": "\n\nWITH RevenueCTE AS (\n  SELECT g.Id, g.Food, g.Flavor, SUM(g.Price) AS TotalRevenue\n  FROM items i\n  JOIN goods g ON i.Item = g.Id\n  JOIN receipts r ON i.Receipt = r.ReceiptNumber\n  WHERE r.Date LIKE '%-Oct-2007'\n  GROUP BY g.Id, g.Food, g.Flavor\n)\nSELECT RevenueCTE.Id, RevenueCTE.Food, RevenueCTE.Flavor, RevenueCTE.TotalRevenue\nFROM RevenueCTE\nORDER BY RevenueCTE.TotalRevenue DESC\nLIMIT 10;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1,
+      "explanation": "The generated query result is similar to the gold query",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": "20-CA-7.5",
+          "Food": "Cake",
+          "Flavor": "Casino",
+          "TotalRevenue": 271.15
+        },
+        {
+          "Id": "24-8x10",
+          "Food": "Cake",
+          "Flavor": "Opera",
+          "TotalRevenue": 239.25
+        },
+        {
+          "Id": "46-11",
+          "Food": "Cake",
+          "Flavor": "Napoleon",
+          "TotalRevenue": 215.84
+        },
+        {
+          "Id": "26-8x10",
+          "Food": "Cake",
+          "Flavor": "Truffle",
+          "TotalRevenue": 191.39999999999998
+        },
+        {
+          "Id": "25-STR-9",
+          "Food": "Cake",
+          "Flavor": "Strawberry",
+          "TotalRevenue": 119.5
+        },
+        {
+          "Id": "20-BC-L-10",
+          "Food": "Cake",
+          "Flavor": "Lemon",
+          "TotalRevenue": 89.5
+        },
+        {
+          "Id": "90-APP-11",
+          "Food": "Tart",
+          "Flavor": "Apple",
+          "TotalRevenue": 81.25
+        },
+        {
+          "Id": "90-APR-PF",
+          "Food": "Tart",
+          "Flavor": "Apricot",
+          "TotalRevenue": 71.5
+        },
+        {
+          "Id": "90-APIE-10",
+          "Food": "Pie",
+          "Flavor": "Apple",
+          "TotalRevenue": 68.25
+        },
+        {
+          "Id": "90-BLK-PF",
+          "Food": "Tart",
+          "Flavor": "Blackberry",
+          "TotalRevenue": 65.0
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": "20-CA-7.5",
+          "Food": "Cake",
+          "Flavor": "Casino",
+          "TotalRevenue": 271.15
+        },
+        {
+          "Id": "24-8x10",
+          "Food": "Cake",
+          "Flavor": "Opera",
+          "TotalRevenue": 239.25
+        },
+        {
+          "Id": "46-11",
+          "Food": "Cake",
+          "Flavor": "Napoleon",
+          "TotalRevenue": 215.84
+        },
+        {
+          "Id": "26-8x10",
+          "Food": "Cake",
+          "Flavor": "Truffle",
+          "TotalRevenue": 191.39999999999998
+        },
+        {
+          "Id": "25-STR-9",
+          "Food": "Cake",
+          "Flavor": "Strawberry",
+          "TotalRevenue": 119.5
+        },
+        {
+          "Id": "20-BC-L-10",
+          "Food": "Cake",
+          "Flavor": "Lemon",
+          "TotalRevenue": 89.5
+        },
+        {
+          "Id": "90-APP-11",
+          "Food": "Tart",
+          "Flavor": "Apple",
+          "TotalRevenue": 81.25
+        },
+        {
+          "Id": "90-APR-PF",
+          "Food": "Tart",
+          "Flavor": "Apricot",
+          "TotalRevenue": 71.5
+        },
+        {
+          "Id": "90-APIE-10",
+          "Food": "Pie",
+          "Flavor": "Apple",
+          "TotalRevenue": 68.25
+        },
+        {
+          "Id": "90-BLK-PF",
+          "Food": "Tart",
+          "Flavor": "Blackberry",
+          "TotalRevenue": 65.0
+        }
+      ]
+    },
+    {
+      "question": "Who are our top 10 customers by number of visits?",
+      "gold_query": "SELECT c.Id, c.FirstName, c.LastName, COUNT(DISTINCT r.ReceiptNumber) AS NumberOfVisits FROM customers c JOIN receipts r ON c.Id = r.CustomerId GROUP BY c.Id, c.FirstName, c.LastName ORDER BY NumberOfVisits DESC LIMIT 10;",
+      "generated_query": "\n\nWITH CustomerVisits AS (SELECT c.Id, COUNT(DISTINCT r.ReceiptNumber) AS NumberOfVisits FROM customers c JOIN receipts r ON c.Id = r.CustomerId GROUP BY c.Id) SELECT cv.Id, c.FirstName, c.LastName, cv.NumberOfVisits FROM CustomerVisits cv JOIN customers c ON cv.Id = c.Id ORDER BY cv.NumberOfVisits DESC LIMIT 10;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "Results are exactly identical",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "NumberOfVisits": 18
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "NumberOfVisits": 16
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "NumberOfVisits": 16
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "NumberOfVisits": 15
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "NumberOfVisits": 15
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 15,
+          "FirstName": "DAVID",
+          "LastName": "CALLENDAR",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "NumberOfVisits": 10
+        },
+        {
+          "Id": 13,
+          "FirstName": "KIP",
+          "LastName": "ARNN",
+          "NumberOfVisits": 9
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "NumberOfVisits": 18
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "NumberOfVisits": 16
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "NumberOfVisits": 16
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "NumberOfVisits": 15
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "NumberOfVisits": 15
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 15,
+          "FirstName": "DAVID",
+          "LastName": "CALLENDAR",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "NumberOfVisits": 11
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "NumberOfVisits": 10
+        },
+        {
+          "Id": 13,
+          "FirstName": "KIP",
+          "LastName": "ARNN",
+          "NumberOfVisits": 9
+        }
+      ]
+    },
+    {
+      "question": "What is the daily revenue trend throughout October 2007?",
+      "gold_query": "SELECT SUBSTR(r.Date, 2, LENGTH(r.Date) - 2) AS SaleDate, SUM(g.Price) AS DailyRevenue FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY SaleDate ORDER BY SaleDate;",
+      "generated_query": "\n\nWITH DailyRevenue AS (\n  SELECT SUBSTR(r.Date, 2, LENGTH(r.Date) - 2) AS SaleDate, SUM(g.Price) AS DailyRevenue\n  FROM receipts r\n  JOIN items i ON r.ReceiptNumber = i.Receipt\n  JOIN goods g ON i.Item = g.Id\n  WHERE r.Date LIKE '%-Oct-2007'\n  GROUP BY SUBSTR(r.Date, 2, LENGTH(r.Date) - 2)\n)\nSELECT SaleDate, DailyRevenue\nFROM DailyRevenue\nORDER BY SaleDate;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1,
+      "explanation": "The results are functionally equivalent.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "SaleDate": "-Oct-200",
+          "DailyRevenue": 597.54
+        },
+        {
+          "SaleDate": "0-Oct-200",
+          "DailyRevenue": 298.82
+        },
+        {
+          "SaleDate": "1-Oct-200",
+          "DailyRevenue": 193.15
+        },
+        {
+          "SaleDate": "2-Oct-200",
+          "DailyRevenue": 259.18
+        },
+        {
+          "SaleDate": "3-Oct-200",
+          "DailyRevenue": 122.2
+        },
+        {
+          "SaleDate": "4-Oct-200",
+          "DailyRevenue": 81.78
+        },
+        {
+          "SaleDate": "5-Oct-200",
+          "DailyRevenue": 146.85999999999999
+        },
+        {
+          "SaleDate": "6-Oct-200",
+          "DailyRevenue": 150.66
+        },
+        {
+          "SaleDate": "7-Oct-200",
+          "DailyRevenue": 77.7
+        },
+        {
+          "SaleDate": "8-Oct-200",
+          "DailyRevenue": 95.83
+        },
+        {
+          "SaleDate": "9-Oct-200",
+          "DailyRevenue": 174.14
+        }
+      ],
+      "generated_result_data": [
+        {
+          "SaleDate": "-Oct-200",
+          "DailyRevenue": 597.54
+        },
+        {
+          "SaleDate": "0-Oct-200",
+          "DailyRevenue": 298.82
+        },
+        {
+          "SaleDate": "1-Oct-200",
+          "DailyRevenue": 193.15
+        },
+        {
+          "SaleDate": "2-Oct-200",
+          "DailyRevenue": 259.18
+        },
+        {
+          "SaleDate": "3-Oct-200",
+          "DailyRevenue": 122.2
+        },
+        {
+          "SaleDate": "4-Oct-200",
+          "DailyRevenue": 81.78
+        },
+        {
+          "SaleDate": "5-Oct-200",
+          "DailyRevenue": 146.85999999999999
+        },
+        {
+          "SaleDate": "6-Oct-200",
+          "DailyRevenue": 150.66
+        },
+        {
+          "SaleDate": "7-Oct-200",
+          "DailyRevenue": 77.7
+        },
+        {
+          "SaleDate": "8-Oct-200",
+          "DailyRevenue": 95.83
+        },
+        {
+          "SaleDate": "9-Oct-200",
+          "DailyRevenue": 174.14
+        }
+      ]
+    },
+    {
+      "question": "Which product flavors appear across multiple product categories?",
+      "gold_query": "SELECT g.Flavor, COUNT(DISTINCT g.Food) AS CategoryCount, GROUP_CONCAT(DISTINCT g.Food) AS Categories FROM goods g GROUP BY g.Flavor HAVING CategoryCount > 1 ORDER BY CategoryCount DESC;",
+      "generated_query": "\n\nWITH FlavorsPerCategory AS (\n  SELECT g.Food, g.Flavor\n  FROM items i\n  JOIN goods g ON i.Item = g.Id\n  GROUP BY g.Food, g.Flavor\n)\nSELECT Flavor\nFROM FlavorsPerCategory\nGROUP BY Flavor\nHAVING COUNT(DISTINCT Food) > 1;",
+      "status": "success",
+      "equivalent": false,
+      "confidence": 0.8,
+      "explanation": "The results are not functionally equivalent because the Generated Query result is missing crucial information, such as the CategoryCount and Categories columns, which are present in the Gold Query result. Although both queries answer the original question 'Which product flavors appear across multiple product categories?', the Gold Query provides additional relevant information about the number of categories and the specific categories for each flavor. The Generated Query only returns the flavors that meet the condition, but lacks the supporting details. Furthermore, the ordering of the results is different, which might be significant depending on the use case.",
+      "differences": [
+        "Missing columns: CategoryCount and Categories",
+        "Different ordering of results"
+      ],
+      "gold_result_data": [
+        {
+          "Flavor": "Chocolate",
+          "CategoryCount": 5,
+          "Categories": "Cake,Eclair,Tart,Meringue,Croissant"
+        },
+        {
+          "Flavor": "Apple",
+          "CategoryCount": 4,
+          "Categories": "Pie,Tart,Croissant,Danish"
+        },
+        {
+          "Flavor": "Almond",
+          "CategoryCount": 4,
+          "Categories": "Tart,Croissant,Twist,Bear Claw"
+        },
+        {
+          "Flavor": "Lemon",
+          "CategoryCount": 3,
+          "Categories": "Cake,Tart,Cookie"
+        },
+        {
+          "Flavor": "Apricot",
+          "CategoryCount": 3,
+          "Categories": "Tart,Croissant,Danish"
+        },
+        {
+          "Flavor": "Vanilla",
+          "CategoryCount": 2,
+          "Categories": "Eclair,Meringue"
+        },
+        {
+          "Flavor": "Blueberry",
+          "CategoryCount": 2,
+          "Categories": "Tart,Danish"
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Flavor": "Almond"
+        },
+        {
+          "Flavor": "Apple"
+        },
+        {
+          "Flavor": "Apricot"
+        },
+        {
+          "Flavor": "Blueberry"
+        },
+        {
+          "Flavor": "Chocolate"
+        },
+        {
+          "Flavor": "Lemon"
+        },
+        {
+          "Flavor": "Vanilla"
+        }
+      ]
+    },
+    {
+      "question": "What is the average number of items purchased per transaction?",
+      "gold_query": "SELECT AVG(ItemCount) AS AverageItemsPerTransaction FROM (SELECT i.Receipt, COUNT(*) AS ItemCount FROM items i GROUP BY i.Receipt);",
+      "generated_query": "\n\nWITH TransactionTotals AS (SELECT i.Receipt, COUNT(*) AS ItemCount FROM items i GROUP BY i.Receipt) SELECT AVG(tt.ItemCount) AS AverageItemsPerTransaction FROM TransactionTotals tt;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "Results are exactly identical",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "AverageItemsPerTransaction": 2.785
+        }
+      ],
+      "generated_result_data": [
+        {
+          "AverageItemsPerTransaction": 2.785
+        }
+      ]
+    },
+    {
+      "question": "Which products are most commonly purchased together?",
+      "gold_query": "SELECT g1.Food || ' - ' || g1.Flavor AS Product1, g2.Food || ' - ' || g2.Flavor AS Product2, COUNT(*) AS PairCount FROM items i1 JOIN items i2 ON i1.Receipt = i2.Receipt AND i1.Item < i2.Item JOIN goods g1 ON i1.Item = g1.Id JOIN goods g2 ON i2.Item = g2.Id GROUP BY Product1, Product2 ORDER BY PairCount DESC LIMIT 10;",
+      "generated_query": "\n\nWITH ProductPairs AS (\n  SELECT i1.Item AS Product1, i2.Item AS Product2\n  FROM items i1\n  JOIN items i2 ON i1.Receipt = i2.Receipt AND i1.Ordinal < i2.Ordinal\n)\nSELECT g1.Food ||'-'|| g1.Flavor AS Product1, g2.Food ||'-'|| g2.Flavor AS Product2, COUNT(*) AS PairCount\nFROM ProductPairs pp\nJOIN goods g1 ON pp.Product1 = g1.Id\nJOIN goods g2 ON pp.Product2 = g2.Id\nGROUP BY Product1, Product2\nORDER BY PairCount DESC\nLIMIT 10;",
+      "status": "success",
+      "equivalent": false,
+      "confidence": 0.9,
+      "explanation": "The two queries seem to be attempting to answer the same question, but the results do not match. Although the queries use similar logic to join and group the data, the results are significantly different. The Gold Query result shows a different set of product pairs with higher PairCount values compared to the Generated Query result. This suggests that the queries are not functionally equivalent.",
+      "differences": [
+        "The product pairs in the results do not match.",
+        "The PairCount values are different, with the Gold Query result having higher values (up to 5) compared to the Generated Query result (all 3).",
+        "The ordering of the results is different, but this may not be significant for the query's purpose."
+      ],
+      "gold_result_data": [
+        {
+          "Product1": "Croissant - Apple",
+          "Product2": "Twist - Almond",
+          "PairCount": 5
+        },
+        {
+          "Product1": "Bear Claw - Almond",
+          "Product2": "Meringue - Vanilla",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Bear Claw - Almond",
+          "Product2": "Tart - Pecan",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Cake - Casino",
+          "Product2": "Croissant - Cheese",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Croissant - Apricot",
+          "Product2": "Twist - Almond",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Croissant - Cheese",
+          "Product2": "Danish - Blueberry",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Eclair - Chocolate",
+          "Product2": "Cake - Napoleon",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Eclair - Chocolate",
+          "Product2": "Tart - Blueberry",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Eclair - Vanilla",
+          "Product2": "Twist - Almond",
+          "PairCount": 4
+        },
+        {
+          "Product1": "Pie - Apple",
+          "Product2": "Tart - Apple",
+          "PairCount": 4
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Product1": "Cake-Truffle",
+          "Product2": "Croissant-Cheese",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Cake-Napoleon",
+          "Product2": "Cookie-Marzipan",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Croissant-Apple",
+          "Product2": "Tart-Apricot",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Croissant-Cheese",
+          "Product2": "Cake-Casino",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Croissant-Cheese",
+          "Product2": "Eclair-Chocolate",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Danish-Apricot",
+          "Product2": "Cookie-Lemon",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Twist-Almond",
+          "Product2": "Croissant-Apple",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Twist-Almond",
+          "Product2": "Croissant-Apricot",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Twist-Almond",
+          "Product2": "Tart-Blackberry",
+          "PairCount": 3
+        },
+        {
+          "Product1": "Twist-Almond",
+          "Product2": "Tart-Chocolate",
+          "PairCount": 3
+        }
+      ]
+    },
+    {
+      "question": "What day of the week has the highest number of transactions?",
+      "gold_query": "SELECT CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END AS DayOfWeek, COUNT(DISTINCT r.ReceiptNumber) AS TransactionCount FROM receipts r GROUP BY DayOfWeek ORDER BY TransactionCount DESC LIMIT 1;",
+      "generated_query": "\n\nWITH DayOfWeekCTE AS (\n  SELECT \n    CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END AS DayOfWeek,\n    COUNT(DISTINCT r.ReceiptNumber) AS TransactionCount\n  FROM receipts r\n  GROUP BY CASE CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday' WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday' WHEN 6 THEN 'Saturday' ELSE 'Sunday' END\n)\nSELECT DayOfWeekCTE.DayOfWeek, DayOfWeekCTE.TransactionCount\nFROM DayOfWeekCTE\nORDER BY DayOfWeekCTE.TransactionCount DESC\nLIMIT 1;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1,
+      "explanation": "The two query results are functionally equivalent because they provide the same answers to the original question.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "DayOfWeek": "Sunday",
+          "TransactionCount": 91
+        }
+      ],
+      "generated_result_data": [
+        {
+          "DayOfWeek": "Sunday",
+          "TransactionCount": 91
+        }
+      ]
+    },
+    {
+      "question": "Which customers have purchased at least one item from each product category?",
+      "gold_query": "WITH CustomerCategories AS (SELECT DISTINCT r.CustomerId, g.Food AS Category FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id), CategoryCount AS (SELECT COUNT(DISTINCT Food) AS TotalCategories FROM goods) SELECT c.Id, c.FirstName || ' ' || c.LastName AS CustomerName, COUNT(DISTINCT cc.Category) AS CategoriesPurchased FROM customers c JOIN CustomerCategories cc ON c.Id = cc.CustomerId CROSS JOIN CategoryCount cat GROUP BY c.Id, CustomerName HAVING CategoriesPurchased = cat.TotalCategories ORDER BY c.Id;",
+      "generated_query": "\n\nWITH CustomerCategories AS (\n  SELECT DISTINCT c.Id, c.FirstName, c.LastName, g.Food AS Category\n  FROM customers c\n  JOIN receipts r ON c.Id = r.CustomerId\n  JOIN items i ON r.ReceiptNumber = i.Receipt\n  JOIN goods g ON i.Item = g.Id\n)\nSELECT *\nFROM CustomerCategories\nGROUP BY Id, FirstName, LastName\nHAVING COUNT(DISTINCT Category) = (SELECT COUNT(DISTINCT Food) FROM goods)",
+      "status": "success",
+      "equivalent": false,
+      "confidence": 0.8,
+      "explanation": "The two queries are not functionally equivalent because they provide different information. The Gold Query provides the customer's ID, full name, and the number of categories they have purchased from, whereas the Generated Query only provides the customer's ID, first name, last name, and one example category they have purchased from. The Generated Query does not provide the count of categories purchased, which is a critical piece of information to answer the original question.",
+      "differences": [
+        "Different columns returned",
+        "Gold Query returns count of categories purchased, Generated Query does not",
+        "Generated Query returns one example category per customer, Gold Query does not"
+      ],
+      "gold_result_data": [
+        {
+          "Id": 6,
+          "CustomerName": "JOSETTE SLINGLAND",
+          "CategoriesPurchased": 10
+        },
+        {
+          "Id": 13,
+          "CustomerName": "KIP ARNN",
+          "CategoriesPurchased": 10
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "Category": "Tart"
+        },
+        {
+          "Id": 13,
+          "FirstName": "KIP",
+          "LastName": "ARNN",
+          "Category": "Twist"
+        }
+      ]
+    },
+    {
+      "question": "What is the revenue distribution by product category?",
+      "gold_query": "SELECT g.Food AS Category, SUM(g.Price) AS TotalRevenue, ROUND(SUM(g.Price) * 100.0 / (SELECT SUM(Price) FROM goods JOIN items ON goods.Id = items.Item), 2) AS PercentOfTotalRevenue FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Food ORDER BY TotalRevenue DESC;",
+      "generated_query": "\n\nWITH RevenueByFood AS (SELECT g.Food, SUM(g.Price) AS TotalRevenue FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Food) SELECT Food, TotalRevenue, ROUND(TotalRevenue * 100.0 / (SELECT SUM(g.Price) FROM items i JOIN goods g ON i.Item = g.Id), 2) AS PercentOfTotalRevenue FROM RevenueByFood ORDER BY TotalRevenue DESC;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1,
+      "explanation": "The two query results are functionally equivalent because they contain the same information, with the same numerical values, and answer the original question equally well. The only difference is in the naming of the columns ('Category' vs 'Food'), which is a minor formatting difference. The ordering of the results is the same, with the highest revenue categories first, which is significant for the query's purpose of showing the revenue distribution by product category. The numerical values are identical, with no differences within acceptable rounding/precision limits.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Category": "Cake",
+          "TotalRevenue": 1126.6399999999999,
+          "PercentOfTotalRevenue": 51.26
+        },
+        {
+          "Category": "Tart",
+          "TotalRevenue": 528.75,
+          "PercentOfTotalRevenue": 24.06
+        },
+        {
+          "Category": "Eclair",
+          "TotalRevenue": 126.75,
+          "PercentOfTotalRevenue": 5.77
+        },
+        {
+          "Category": "Croissant",
+          "TotalRevenue": 106.1,
+          "PercentOfTotalRevenue": 4.83
+        },
+        {
+          "Category": "Cookie",
+          "TotalRevenue": 97.67,
+          "PercentOfTotalRevenue": 4.44
+        },
+        {
+          "Category": "Pie",
+          "TotalRevenue": 68.25,
+          "PercentOfTotalRevenue": 3.11
+        },
+        {
+          "Category": "Danish",
+          "TotalRevenue": 44.849999999999994,
+          "PercentOfTotalRevenue": 2.04
+        },
+        {
+          "Category": "Meringue",
+          "TotalRevenue": 41.1,
+          "PercentOfTotalRevenue": 1.87
+        },
+        {
+          "Category": "Bear Claw",
+          "TotalRevenue": 37.05,
+          "PercentOfTotalRevenue": 1.69
+        },
+        {
+          "Category": "Twist",
+          "TotalRevenue": 20.7,
+          "PercentOfTotalRevenue": 0.94
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Food": "Cake",
+          "TotalRevenue": 1126.6399999999999,
+          "PercentOfTotalRevenue": 51.26
+        },
+        {
+          "Food": "Tart",
+          "TotalRevenue": 528.75,
+          "PercentOfTotalRevenue": 24.06
+        },
+        {
+          "Food": "Eclair",
+          "TotalRevenue": 126.75,
+          "PercentOfTotalRevenue": 5.77
+        },
+        {
+          "Food": "Croissant",
+          "TotalRevenue": 106.1,
+          "PercentOfTotalRevenue": 4.83
+        },
+        {
+          "Food": "Cookie",
+          "TotalRevenue": 97.67,
+          "PercentOfTotalRevenue": 4.44
+        },
+        {
+          "Food": "Pie",
+          "TotalRevenue": 68.25,
+          "PercentOfTotalRevenue": 3.11
+        },
+        {
+          "Food": "Danish",
+          "TotalRevenue": 44.849999999999994,
+          "PercentOfTotalRevenue": 2.04
+        },
+        {
+          "Food": "Meringue",
+          "TotalRevenue": 41.1,
+          "PercentOfTotalRevenue": 1.87
+        },
+        {
+          "Food": "Bear Claw",
+          "TotalRevenue": 37.05,
+          "PercentOfTotalRevenue": 1.69
+        },
+        {
+          "Food": "Twist",
+          "TotalRevenue": 20.7,
+          "PercentOfTotalRevenue": 0.94
+        }
+      ]
+    },
+    {
+      "question": "Which customers made multiple visits to our bakery in October 2007?",
+      "gold_query": "SELECT c.Id, c.FirstName, c.LastName, COUNT(DISTINCT r.ReceiptNumber) AS VisitCount FROM customers c JOIN receipts r ON c.Id = r.CustomerId GROUP BY c.Id, c.FirstName, c.LastName HAVING VisitCount > 1 ORDER BY VisitCount DESC LIMIT 10;",
+      "generated_query": "WITH CustomerCTE AS (   SELECT c.Id, c.FirstName, c.LastName, COUNT(DISTINCT r.ReceiptNumber) AS VisitCount   FROM customers c   JOIN receipts r ON c.Id = r.CustomerId   WHERE r.Date LIKE '%-Oct-2007'   GROUP BY c.Id, c.FirstName, c.LastName   HAVING VisitCount > 1 ) SELECT Id, FirstName, LastName, VisitCount FROM CustomerCTE ORDER BY VisitCount DESC LIMIT 10;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "The two queries are functionally equivalent because they produce the same results.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "VisitCount": 18
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "VisitCount": 16
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "VisitCount": 16
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "VisitCount": 15
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "VisitCount": 15
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "VisitCount": 11
+        },
+        {
+          "Id": 15,
+          "FirstName": "DAVID",
+          "LastName": "CALLENDAR",
+          "VisitCount": 11
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "VisitCount": 11
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "VisitCount": 10
+        },
+        {
+          "Id": 13,
+          "FirstName": "KIP",
+          "LastName": "ARNN",
+          "VisitCount": 9
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": 8,
+          "FirstName": "RUPERT",
+          "LastName": "HELING",
+          "VisitCount": 18
+        },
+        {
+          "Id": 7,
+          "FirstName": "SHARRON",
+          "LastName": "TOUSSAND",
+          "VisitCount": 16
+        },
+        {
+          "Id": 20,
+          "FirstName": "STEPHEN",
+          "LastName": "ZEME",
+          "VisitCount": 16
+        },
+        {
+          "Id": 6,
+          "FirstName": "JOSETTE",
+          "LastName": "SLINGLAND",
+          "VisitCount": 15
+        },
+        {
+          "Id": 14,
+          "FirstName": "RAYFORD",
+          "LastName": "SOPKO",
+          "VisitCount": 15
+        },
+        {
+          "Id": 1,
+          "FirstName": "JULIET",
+          "LastName": "LOGAN",
+          "VisitCount": 11
+        },
+        {
+          "Id": 15,
+          "FirstName": "DAVID",
+          "LastName": "CALLENDAR",
+          "VisitCount": 11
+        },
+        {
+          "Id": 16,
+          "FirstName": "ARIANE",
+          "LastName": "CRUZEN",
+          "VisitCount": 11
+        },
+        {
+          "Id": 5,
+          "FirstName": "OSVALDO",
+          "LastName": "DUNLOW",
+          "VisitCount": 10
+        },
+        {
+          "Id": 13,
+          "FirstName": "KIP",
+          "LastName": "ARNN",
+          "VisitCount": 9
+        }
+      ]
+    },
+    {
+      "question": "Which products have the highest price to sales ratio?",
+      "gold_query": "SELECT g.Id, g.Food, g.Flavor, g.Price, COUNT(*) AS SalesCount, ROUND(g.Price / COUNT(*), 2) AS PriceToSalesRatio FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Id, g.Food, g.Flavor, g.Price ORDER BY PriceToSalesRatio DESC LIMIT 10;",
+      "generated_query": "\n\nWITH ProductRatios AS (\n  SELECT g.Id, g.Food, g.Flavor, g.Price, COUNT(*) AS SalesCount, ROUND(g.Price / COUNT(*), 2) AS PriceToSalesRatio\n  FROM items i\n  JOIN goods g ON i.Item = g.Id\n  GROUP BY g.Id, g.Food, g.Flavor, g.Price\n)\nSELECT *\nFROM ProductRatios\nORDER BY PriceToSalesRatio DESC\nLIMIT 10;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "Results are exactly identical",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Id": "26-8x10",
+          "Food": "Cake",
+          "Flavor": "Truffle",
+          "Price": 15.95,
+          "SalesCount": 12,
+          "PriceToSalesRatio": 1.33
+        },
+        {
+          "Id": "25-STR-9",
+          "Food": "Cake",
+          "Flavor": "Strawberry",
+          "Price": 11.95,
+          "SalesCount": 10,
+          "PriceToSalesRatio": 1.19
+        },
+        {
+          "Id": "24-8x10",
+          "Food": "Cake",
+          "Flavor": "Opera",
+          "Price": 15.95,
+          "SalesCount": 15,
+          "PriceToSalesRatio": 1.06
+        },
+        {
+          "Id": "20-CA-7.5",
+          "Food": "Cake",
+          "Flavor": "Casino",
+          "Price": 15.95,
+          "SalesCount": 17,
+          "PriceToSalesRatio": 0.94
+        },
+        {
+          "Id": "20-BC-L-10",
+          "Food": "Cake",
+          "Flavor": "Lemon",
+          "Price": 8.95,
+          "SalesCount": 10,
+          "PriceToSalesRatio": 0.89
+        },
+        {
+          "Id": "46-11",
+          "Food": "Cake",
+          "Flavor": "Napoleon",
+          "Price": 13.49,
+          "SalesCount": 16,
+          "PriceToSalesRatio": 0.84
+        },
+        {
+          "Id": "90-APIE-10",
+          "Food": "Pie",
+          "Flavor": "Apple",
+          "Price": 5.25,
+          "SalesCount": 13,
+          "PriceToSalesRatio": 0.4
+        },
+        {
+          "Id": "90-LEM-11",
+          "Food": "Tart",
+          "Flavor": "Lemon",
+          "Price": 3.25,
+          "SalesCount": 9,
+          "PriceToSalesRatio": 0.36
+        },
+        {
+          "Id": "90-ALM-I",
+          "Food": "Tart",
+          "Flavor": "Almond",
+          "Price": 3.75,
+          "SalesCount": 11,
+          "PriceToSalesRatio": 0.34
+        },
+        {
+          "Id": "90-PEC-11",
+          "Food": "Tart",
+          "Flavor": "Pecan",
+          "Price": 3.75,
+          "SalesCount": 12,
+          "PriceToSalesRatio": 0.31
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Id": "26-8x10",
+          "Food": "Cake",
+          "Flavor": "Truffle",
+          "Price": 15.95,
+          "SalesCount": 12,
+          "PriceToSalesRatio": 1.33
+        },
+        {
+          "Id": "25-STR-9",
+          "Food": "Cake",
+          "Flavor": "Strawberry",
+          "Price": 11.95,
+          "SalesCount": 10,
+          "PriceToSalesRatio": 1.19
+        },
+        {
+          "Id": "24-8x10",
+          "Food": "Cake",
+          "Flavor": "Opera",
+          "Price": 15.95,
+          "SalesCount": 15,
+          "PriceToSalesRatio": 1.06
+        },
+        {
+          "Id": "20-CA-7.5",
+          "Food": "Cake",
+          "Flavor": "Casino",
+          "Price": 15.95,
+          "SalesCount": 17,
+          "PriceToSalesRatio": 0.94
+        },
+        {
+          "Id": "20-BC-L-10",
+          "Food": "Cake",
+          "Flavor": "Lemon",
+          "Price": 8.95,
+          "SalesCount": 10,
+          "PriceToSalesRatio": 0.89
+        },
+        {
+          "Id": "46-11",
+          "Food": "Cake",
+          "Flavor": "Napoleon",
+          "Price": 13.49,
+          "SalesCount": 16,
+          "PriceToSalesRatio": 0.84
+        },
+        {
+          "Id": "90-APIE-10",
+          "Food": "Pie",
+          "Flavor": "Apple",
+          "Price": 5.25,
+          "SalesCount": 13,
+          "PriceToSalesRatio": 0.4
+        },
+        {
+          "Id": "90-LEM-11",
+          "Food": "Tart",
+          "Flavor": "Lemon",
+          "Price": 3.25,
+          "SalesCount": 9,
+          "PriceToSalesRatio": 0.36
+        },
+        {
+          "Id": "90-ALM-I",
+          "Food": "Tart",
+          "Flavor": "Almond",
+          "Price": 3.75,
+          "SalesCount": 11,
+          "PriceToSalesRatio": 0.34
+        },
+        {
+          "Id": "90-PEC-11",
+          "Food": "Tart",
+          "Flavor": "Pecan",
+          "Price": 3.75,
+          "SalesCount": 12,
+          "PriceToSalesRatio": 0.31
+        }
+      ]
+    },
+    {
+      "question": "What is the average spending per visit for each customer?",
+      "gold_query": "SELECT c.Id, c.FirstName, c.LastName, COUNT(DISTINCT r.ReceiptNumber) AS VisitCount, SUM(g.Price) AS TotalSpent, ROUND(SUM(g.Price) / COUNT(DISTINCT r.ReceiptNumber), 2) AS AverageSpendPerVisit FROM customers c JOIN receipts r ON c.Id = r.CustomerId JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY c.Id, c.FirstName, c.LastName ORDER BY AverageSpendPerVisit DESC;",
+      "generated_query": "\n\nWITH CustomerReceipts AS (SELECT c.Id, COUNT(DISTINCT r.ReceiptNumber) AS VisitCount, SUM(g.Price) AS TotalSpent FROM customers c JOIN receipts r ON c.Id = r.CustomerId JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY c.Id) SELECT cr.Id, cr.VisitCount, cr.TotalSpent, ROUND(cr.TotalSpent / cr.VisitCount, 2) AS AverageSpendPerVisit FROM CustomerReceipts cr ORDER BY cr.AverageSpendPerVisit DESC;",
+      "status": "error",
+      "error": "Query execution failed",
+      "equivalent": false,
+      "confidence": 0.0,
+      "explanation": "One or both queries failed to execute"
+    },
+    {
+      "question": "How do weekday sales compare to weekend sales in terms of volume and revenue?",
+      "gold_query": "SELECT CASE WHEN CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 IN (0, 6) THEN 'Weekend' ELSE 'Weekday' END AS DayType, COUNT(DISTINCT r.ReceiptNumber) AS TransactionCount, SUM(g.Price) AS TotalRevenue, COUNT(*) AS ItemsSold, ROUND(SUM(g.Price) / COUNT(DISTINCT r.ReceiptNumber), 2) AS AverageTransactionValue FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY DayType;",
+      "generated_query": "\n\nWITH DayTypeCTE AS (\n  SELECT \n    CASE WHEN CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) % 7 IN (0, 6) THEN 'Weekend'\n         ELSE 'Weekday' END AS DayType,\n    r.ReceiptNumber,\n    g.Price,\n    i.Item\n  FROM receipts r\n  JOIN items i ON r.ReceiptNumber = i.Receipt\n  JOIN goods g ON i.Item = g.Id\n)\nSELECT \n  DayTypeCTE.DayType,\n  COUNT(DISTINCT DayTypeCTE.ReceiptNumber) AS TransactionCount,\n  SUM(DayTypeCTE.Price) AS TotalRevenue,\n  COUNT(*) AS ItemsSold,\n  ROUND(SUM(DayTypeCTE.Price) / COUNT(DISTINCT DayTypeCTE.ReceiptNumber), 2) AS AverageTransactionValue\nFROM DayTypeCTE\nGROUP BY DayTypeCTE.DayType;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "The two query results not functionally equivalent because they produce the same values for the same columns.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "DayType": "Weekday",
+          "TransactionCount": 97,
+          "TotalRevenue": 1073.1399999999999,
+          "ItemsSold": 266,
+          "AverageTransactionValue": 11.06
+        },
+        {
+          "DayType": "Weekend",
+          "TransactionCount": 103,
+          "TotalRevenue": 1124.72,
+          "ItemsSold": 291,
+          "AverageTransactionValue": 10.92
+        }
+      ],
+      "generated_result_data": [
+        {
+          "DayType": "Weekday",
+          "TransactionCount": 97,
+          "TotalRevenue": 1073.1399999999999,
+          "ItemsSold": 266,
+          "AverageTransactionValue": 11.06
+        },
+        {
+          "DayType": "Weekend",
+          "TransactionCount": 103,
+          "TotalRevenue": 1124.72,
+          "ItemsSold": 291,
+          "AverageTransactionValue": 10.92
+        }
+      ]
+    },
+    {
+      "question": "Which flavor is the most popular across all product categories?",
+      "gold_query": "SELECT g.Flavor, COUNT(*) AS PurchaseCount FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Flavor ORDER BY PurchaseCount DESC LIMIT 1;",
+      "generated_query": "\n\nWITH GoodsFlavorCTE AS (SELECT g.Flavor, COUNT(*) AS PurchaseCount FROM items i JOIN goods g ON i.Item = g.Id GROUP BY g.Flavor) SELECT Flavor, PurchaseCount FROM GoodsFlavorCTE ORDER BY PurchaseCount DESC LIMIT 1;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "Results are exactly identical",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "Flavor": "Apple",
+          "PurchaseCount": 65
+        }
+      ],
+      "generated_result_data": [
+        {
+          "Flavor": "Apple",
+          "PurchaseCount": 65
+        }
+      ]
+    },
+    {
+      "question": "What time of the month (early, mid, late) has the highest sales?",
+      "gold_query": "SELECT CASE WHEN CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) <= 10 THEN 'Early October' WHEN CAST(SUBSTR(r.Date, 2, 2) AS INTEGER) <= 20 THEN 'Mid October' ELSE 'Late October' END AS TimePeriod, COUNT(*) AS ItemsSold, SUM(g.Price) AS TotalRevenue FROM receipts r JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY TimePeriod ORDER BY TotalRevenue DESC;",
+      "generated_query": "\n\nWITH ReceiptTotals AS (\n  SELECT r.Date, i.Item, g.Price\n  FROM receipts r \n  JOIN items i ON r.ReceiptNumber = i.Receipt \n  JOIN goods g ON i.Item = g.Id\n) \nSELECT \n  CASE WHEN CAST(SUBSTR(rt.Date, 2, 2) AS INTEGER) <= 10 THEN 'Early October' \n       WHEN CAST(SUBSTR(rt.Date, 2, 2) AS INTEGER) <= 20 THEN 'Mid October' \n       ELSE 'Late October' END AS TimePeriod, \n  COUNT(*) AS ItemsSold,\n  SUM(rt.Price) AS TotalRevenue \nFROM ReceiptTotals rt \nGROUP BY TimePeriod \nORDER BY TotalRevenue DESC;",
+      "status": "success",
+      "equivalent": true,
+      "confidence": 1.0,
+      "explanation": "The results are functionally equivalent.",
+      "differences": [],
+      "gold_result_data": [
+        {
+          "TimePeriod": "Early October",
+          "ItemsSold": 557,
+          "TotalRevenue": 2197.86
+        }
+      ],
+      "generated_result_data": [
+        {
+          "TimePeriod": "Early October",
+          "ItemsSold": 557,
+          "TotalRevenue": 2197.86
+        }
+      ]
+    },
+    {
+      "question": "Which customers purchase the most varied products?",
+      "gold_query": "SELECT c.Id, c.FirstName, c.LastName, COUNT(DISTINCT g.Id) AS UniqueProducts, COUNT(DISTINCT g.Food) AS UniqueCategories, COUNT(DISTINCT g.Flavor) AS UniqueFlavors FROM customers c JOIN receipts r ON c.Id = r.CustomerId JOIN items i ON r.ReceiptNumber = i.Receipt JOIN goods g ON i.Item = g.Id GROUP BY c.Id, c.FirstName, c.LastName ORDER BY UniqueProducts DESC, UniqueCategories DESC, UniqueFlavors DESC LIMIT 10;",
+      "generated_query": "WITH CustomerProducts AS ( SELECT c.Id, COUNT(DISTINCT g.Id) AS UniqueProducts, COUNT(DISTINCT g.Food) AS UniqueCategories, COUNT(DISTINCT g.Flavor) AS UniqueFlavors FROM Customers c JOIN Receipts r ON c.Id = r.CustomerId JOIN Items i ON r.ReceiptNumber = i.Receipt JOIN Goods g ON i.Item = g.Id GROUP BY c.Id ) SELECT c.Id, c.FirstName, c.LastName, cp.UniqueProducts, cp.UniqueCategories, cp.UniqueFlavors FROM CustomerProducts cp JOIN Customers c ON cp.Id = c.Id ORDER BY cp.UniqueProducts + cp.UniqueCategories + cp.UniqueFlavors DESC LIMIT 10;",
+      "status": "error",
+      "error": "Query execution failed",
+      "equivalent": false,
+      "confidence": 0.0,
+      "explanation": "One or both queries failed to execute"
+    }
+  ],
+  "stats": {
+    "total": 20,
+    "equivalent": 15,
+    "non_equivalent": 3,
+    "execution_errors": 2,
+    "average_confidence": 0.92,
+    "equivalence_rate": 0.75
+  }
+}
