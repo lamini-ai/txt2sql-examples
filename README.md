@@ -40,7 +40,7 @@ The database consists of four tables:
 
 #### receipts
 - `RecieptNumber`: Unique identifier of the receipt
-- `Date`: Date of purchase (DD-Mon-YYYY format)
+- `Date`: Date of purchase (DD-MM-YYYY format)
 - `CustomerId`: Customer ID (foreign key to customers.Id)
 
 ## Getting Started
