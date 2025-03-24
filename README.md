@@ -12,7 +12,7 @@ The pipeline includes:
 2. **Data Validation**: Ensure generated SQL queries are valid and executable
 3. **Coverage Analysis**: Identify and fill gaps in SQL concept coverage
 4. **Memory Tuning**: Fine-tune a language model on the generated data
-5. **Performance Evaluation**: Test the model against a held-out evaluation set
+5. **Performance Evaluation**: Test the model against evaluation set
 
 ## Bakery Dataset
 
@@ -42,14 +42,6 @@ The database consists of four tables:
 - `RecieptNumber`: Unique identifier of the receipt
 - `Date`: Date of purchase (DD-Mon-YYYY format)
 - `CustomerId`: Customer ID (foreign key to customers.Id)
-
-### Sample Questions
-
-Example natural language questions for this database:
-- "What is the average price of chocolate cakes?"
-- "Which customer made the most purchases in January?"
-- "List all flavors of tarts available in the bakery"
-- "How many different items did customer with ID 15 purchase?"
 
 ## Getting Started
 
@@ -123,7 +115,7 @@ This script:
 - Decomposes complex questions into simpler sub-questions
 - Ensures all generated variations include their corresponding SQL queries
 - Outputs two files: 
-  - flattened.jsonl (only the question and query pairs)
+  - flattened.jsonl (only the VALID question and query pairs)
   - nested_results.jsonl (detailed information including question, query, validation status, original question, and original query)
 
 #### Analyze Coverage and Generate Additional Data
@@ -137,11 +129,10 @@ This script (optional but recommended):
 - Identifies SQL concepts not covered in the generated data
 - Generates 2 additional questions for each missing concept
 - Validates the SQL queries and passes them through a debugger if needed
-- Collects all failed queries from both stages for analysis
+- Collects all failed queries for analysis
 - Provides a detailed analysis of why certain queries failed
-- Outputs additional_questions.jsonl for enhancing your training data
+- Outputs additional_questions.jsonl for enhancing your training data. NOTE: Copy this file and append to flattened.jsonl if you would like to use the additional questions 
 
-Note: This step may take a few minutes to complete and can be skipped if time-constrained.
 
 #### Fine-tune a Model
 
@@ -155,7 +146,7 @@ This script:
 - Submits the tuning job to Lamini's API
 - Displays the tuning job information
 
-Important: After the job completes, you'll need to get the model ID from the Lamini app environment for the next step.
+NOTE: After the job completes, you'll need to get the model ID from the Lamini app environment for the next step.
 
 #### Evaluate the Model
 
@@ -188,6 +179,6 @@ Running the pipeline will generate:
 
 1. **Nested Results**: Generated questions and SQL stored in a JSONL file along with the original questions, SQL queries, and validation information
 2. **Flattened Results**: Generated questions and SQL pairs in a simpler JSONL format for training
-3. **Tuned Model**: A model ID returned by Lamini's API that can be used for inference
+3. **Tuned Model**: A model ID that can be used for inference
 4. **Evaluation Results**: JSON file with detailed comparison of generated queries vs. gold standard
 5. **Analysis Report**: Markdown report summarizing the model's performance
